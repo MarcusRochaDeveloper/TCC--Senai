@@ -1,7 +1,7 @@
 # TSEA Digital Factory — Painel Industrial de Chão de Fábrica
 
 > **TCC · SENAI · Tecnologia em Sistemas para Internet**  
-> Aluno: Marcus Rocha · Orientador: [Nome do orientador]  
+> Aluno: Marcus Rocha · 
 > Empresa parceira: [TSEA Energia](https://www.tseaenergia.com.br/) — Contagem, MG
 
 ---
