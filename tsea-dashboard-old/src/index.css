@@ -1,0 +1,192 @@
+@import "tailwindcss";
+
+/* ===== TSEA Industrial Design System ===== */
+
+/* Custom Theme Tokens */
+@theme {
+  /* Industrial Dark Palette — charcoal/gunmetal backgrounds, high-contrast accents */
+  --color-bg-primary: #0a0a0f;
+  --color-bg-secondary: #12121a;
+  --color-bg-tertiary: #1a1a26;
+  --color-bg-panel: #141420;
+  --color-bg-header: #0d0d15;
+  
+  /* Surface colors for cards/panels */
+  --color-surface-dark: #16161f;
+  --color-surface-medium: #1e1e2a;
+  --color-surface-light: #252535;
+  --color-surface-hover: #2a2a3d;
+  
+  /* Border colors */
+  --color-border-subtle: #2a2a3d;
+  --color-border-default: #363650;
+  --color-border-active: #4a8cff;
+  
+  /* Text palette — high contrast on dark */
+  --color-text-primary: #f0f0f5;
+  --color-text-secondary: #a0a0b8;
+  --color-text-muted: #6a6a82;
+  --color-text-inverse: #0a0a0f;
+  
+  /* Accent Colors — TSEA industrial blue */
+  --color-accent-blue: #4a8cff;
+  --color-accent-blue-dim: #2d5db8;
+  --color-accent-blue-glow: #4a8cff33;
+  
+  /* Status Colors */
+  --color-status-online: #22c55e;
+  --color-status-offline: #ef4444;
+  --color-status-warning: #f59e0b;
+  --color-status-info: #3b82f6;
+  
+  /* Industrial Amber accent (for warnings/highlights) */
+  --color-accent-amber: #f59e0b;
+  --color-accent-amber-dim: #b37209;
+  
+  /* Spacing scale */
+  --spacing-header: 64px;
+  
+  /* Radius */
+  --radius-panel: 12px;
+  --radius-button: 8px;
+  
+  /* Touch targets for gloved operation (min 48px) */
+  --size-touch-min: 48px;
+  --size-touch-lg: 56px;
+  
+  /* Font families */
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+/* ===== Global Resets & Base ===== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===== Scrollbar styling (industrial dark) ===== */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-default);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent-blue-dim);
+}
+
+/* ===== Industrial Utility Classes ===== */
+
+/* Glow effects for active elements */
+.glow-blue {
+  box-shadow: 0 0 20px var(--color-accent-blue-glow),
+              0 0 60px rgba(74, 140, 255, 0.1);
+}
+
+.glow-pulse {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 5px var(--color-accent-blue-glow);
+  }
+  50% {
+    box-shadow: 0 0 20px var(--color-accent-blue-glow),
+                0 0 40px rgba(74, 140, 255, 0.15);
+  }
+}
+
+/* Status indicator blink */
+@keyframes status-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.status-blink {
+  animation: status-blink 1.5s ease-in-out infinite;
+}
+
+/* Subtle panel fade-in */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in-up 0.5s ease-out forwards;
+}
+
+/* Grid scan line animation for industrial feel */
+@keyframes scan-line {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+.scan-line::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--color-accent-blue), transparent);
+  opacity: 0.3;
+  animation: scan-line 8s linear infinite;
+}
+
+/* Noise texture overlay for depth */
+.noise-overlay {
+  position: relative;
+}
+
+.noise-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  border-radius: inherit;
+}
+
+/* ===== Panel/Card base ===== */
+.panel-base {
+  background-color: var(--color-bg-panel);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-panel);
+  position: relative;
+  overflow: hidden;
+}

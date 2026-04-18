@@ -1,0 +1,68 @@
+# ─── Node & package managers ─────────────────────────────
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnp
+.pnp.js
+
+# ─── Build outputs ────────────────────────────────────────
+dist/
+dist-ssr/
+build/
+out/
+.output/
+
+# ─── Environment & secrets ────────────────────────────────
+.env
+.env.local
+.env.*.local
+*.env
+
+# ─── Editor & OS ─────────────────────────────────────────
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ─── TypeScript caches ────────────────────────────────────
+*.tsbuildinfo
+tsconfig.tsbuildinfo
+
+# ─── Vite cache ───────────────────────────────────────────
+.vite/
+vite.config.ts.timestamp-*
+
+# ─── PWA ──────────────────────────────────────────────────
+sw.js
+workbox-*.js
+*-precache-manifest.*.js
+
+# ─── Logs ─────────────────────────────────────────────────
+logs/
+*.log
+
+# ─── Test coverage ────────────────────────────────────────
+coverage/
+.nyc_output/
+
+# ─── Supabase local stack ─────────────────────────────────
+supabase/.branches/
+supabase/.temp/
+supabase/functions/.env
+
+# ─── Assets binários grandes (não versionar no git) ───────
+# Adicionar PDFs e modelos 3D reais via Git LFS ou CDN
+public/assets/*.pdf
+public/models/**/*.glb
+public/models/**/*.gltf
+!public/models/.gitkeep
