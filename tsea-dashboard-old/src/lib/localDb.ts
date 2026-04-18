@@ -120,7 +120,7 @@ const SEED_DOCUMENTS: DbDocument[] = [
     title: 'Esquema de Montagem Principal',
     revision: 'Rev C',
     status: 'Released',
-    storage_path: null,   // null = sem PDF local ainda
+    storage_path: 'esquema-montagem-40mva.pdf',
     storage_path_3d: null,
   },
   {
@@ -129,7 +129,7 @@ const SEED_DOCUMENTS: DbDocument[] = [
     title: 'Procedimento de Bobinagem',
     revision: 'Rev A',
     status: 'Released',
-    storage_path: null,
+    storage_path: 'procedimento-bobinagem-15mva.pdf',
     storage_path_3d: null,
   },
 ]
@@ -150,22 +150,22 @@ let _initPromise: Promise<LocalDatabase> | null = null
 async function buildDatabase(): Promise<LocalDatabase> {
   // Derivar hashes PBKDF2 para os 3 operadores de teste
   const seedUsersRaw = [
-    { id: 'usr-carlos',  badge: 'A3F2B1C0', name: 'Carlos Alvarenga', reg: 'TS-001', role: 'operador',   sector: 'Montagem de Transformadores', sector_code: 'MT-01' },
-    { id: 'usr-mariana', badge: 'FF01A2B3', name: 'Mariana Couto',    reg: 'TS-002', role: 'inspetor',   sector: 'Bobinagem',                   sector_code: 'BO-02' },
-    { id: 'usr-jose',    badge: 'CC9944DD', name: 'José Ferreira',    reg: 'TS-003', role: 'engenheiro', sector: 'Testes Elétricos',            sector_code: 'TE-03' },
+    { id: 'usr-carlos', badge: 'A3F2B1C0', name: 'Carlos Alvarenga', reg: 'TS-001', role: 'operador', sector: 'Montagem de Transformadores', sector_code: 'MT-01' },
+    { id: 'usr-mariana', badge: 'FF01A2B3', name: 'Mariana Couto', reg: 'TS-002', role: 'inspetor', sector: 'Bobinagem', sector_code: 'BO-02' },
+    { id: 'usr-jose', badge: 'CC9944DD', name: 'José Ferreira', reg: 'TS-003', role: 'engenheiro', sector: 'Testes Elétricos', sector_code: 'TE-03' },
   ]
 
   const users: DbUser[] = await Promise.all(
     seedUsersRaw.map(async u => ({
-      id:                  u.id,
-      badge_uid:           u.badge,
-      name:                u.name,
+      id: u.id,
+      badge_uid: u.badge,
+      name: u.name,
       registration_number: u.reg,
-      role:                u.role,
-      sector:              u.sector,
-      sector_code:         u.sector_code,
-      is_active:           true,
-      password_hash:       await derivePasswordFromUid(u.badge),
+      role: u.role,
+      sector: u.sector,
+      sector_code: u.sector_code,
+      is_active: true,
+      password_hash: await derivePasswordFromUid(u.badge),
     }))
   )
 

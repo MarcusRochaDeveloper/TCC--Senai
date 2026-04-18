@@ -171,16 +171,16 @@ export default function LockScreen() {
           )}
         </div>
 
-        {/* Demo helper */}
+        {/* Operadores cadastrados */}
         <div className="lock-demo-info">
-          <span className="lock-demo-title">Modo Demo — UIDs de teste (seed):</span>
+          <span className="lock-demo-title">Operadores Cadastrados:</span>
           <div className="lock-demo-uids">
             <code>A3F2B1C0</code> Carlos Alvarenga (Operador — Montagem)
             <code>FF01A2B3</code> Mariana Couto (Inspetora — Bobinagem)
             <code>CC9944DD</code> José Ferreira (Engenheiro — Testes)
           </div>
           <span className="lock-demo-hint">
-            Digite o UID no teclado e pressione Enter (simula leitura RFID)
+            Aproxime o crachá RFID ou digite o UID e pressione Enter
           </span>
         </div>
       </div>

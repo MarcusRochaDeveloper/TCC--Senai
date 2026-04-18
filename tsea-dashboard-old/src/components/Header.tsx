@@ -4,12 +4,14 @@ interface HeaderProps {
   opTitle?: string
   opNumber?: string
   onOpenQrScanner?: () => void
+  onOpenOpSelector?: () => void
 }
 
 export default function Header({
   opTitle = 'Transformador 500MVA',
   opNumber = '9982',
   onOpenQrScanner,
+  onOpenOpSelector,
 }: HeaderProps) {
   const operator = useAuthStore((s) => s.operator)
   const logout = useAuthStore((s) => s.logout)
@@ -73,6 +75,21 @@ export default function Header({
       <div className="header-rfid-area">
         {operator ? (
           <>
+            {onOpenOpSelector && (
+              <button
+                className="industrial-btn btn-secondary"
+                onClick={onOpenOpSelector}
+                title="Selecionar Ordem de Produção"
+                style={{ marginRight: 8 }}
+              >
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" style={{ marginRight: 4, display: 'inline' }}>
+                  <rect x="2" y="3" width="14" height="3" rx="1" stroke="currentColor" strokeWidth="1.2" />
+                  <rect x="2" y="8" width="14" height="3" rx="1" stroke="currentColor" strokeWidth="1.2" opacity="0.7" />
+                  <rect x="2" y="13" width="14" height="3" rx="1" stroke="currentColor" strokeWidth="1.2" opacity="0.4" />
+                </svg>
+                OPs
+              </button>
+            )}
             {onOpenQrScanner && (
               <button
                 className="industrial-btn btn-secondary"
@@ -104,7 +121,10 @@ export default function Header({
               onClick={handleLogout}
               title="Encerrar sessão (ou aproxime outro crachá)"
             >
-              🔒
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <rect x="3" y="7" width="10" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.2" />
+                <path d="M5 7V5a3 3 0 016 0v2" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+              </svg>
               <span className="rfid-test-label">Sair</span>
             </button>
           </>

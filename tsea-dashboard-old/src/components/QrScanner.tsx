@@ -155,7 +155,13 @@ export default function QrScanner({ onScan, onScanSuccess, open, onClose }: QrSc
         {/* Result */}
         {lastResult && (
           <div className="qr-result">
-            <h3 className="qr-result-title">✅ Código Detectado</h3>
+            <h3 className="qr-result-title">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" style={{ display: 'inline', verticalAlign: 'middle', marginRight: 6 }}>
+                <circle cx="9" cy="9" r="7" stroke="var(--color-status-online)" strokeWidth="1.5" />
+                <path d="M5.5 9l2.5 2.5 4.5-4.5" stroke="var(--color-status-online)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              Código Detectado
+            </h3>
             <div className="qr-result-fields">
               {lastResult.gtin && (
                 <div className="qr-field"><span className="qr-field-label">Part Number:</span> <code>{lastResult.gtin}</code></div>

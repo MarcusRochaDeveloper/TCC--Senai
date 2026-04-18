@@ -53,26 +53,26 @@ export const getProductionOrder = async (
   // Audit log (fire-and-forget)
   const currentUser = getCurrentUser()
   void insertAuditLog({
-    factory_user_id:     currentUser?.id ?? null,
+    factory_user_id: currentUser?.id ?? null,
     production_order_id: order.id,
-    document_id:         doc?.id ?? null,
-    action:              'op_opened',
-    metadata:            { op_number: opNumber, document_revision: doc?.revision ?? null },
+    document_id: doc?.id ?? null,
+    action: 'op_opened',
+    metadata: { op_number: opNumber, document_revision: doc?.revision ?? null },
   })
 
   return {
-    opNumber:      order.op_number,
-    title:         order.product_title,
-    productType:   order.product_type,
-    mvaClass:      order.mva_class,
-    kvClass:       order.kv_class,
-    sector:        order.sector,
-    status:        order.status,
+    opNumber: order.op_number,
+    title: order.product_title,
+    productType: order.product_type,
+    mvaClass: order.mva_class,
+    kvClass: order.kv_class,
+    sector: order.sector,
+    status: order.status,
     pdfUrl,
     glbUrl,
-    documentId:    doc?.id ?? null,
+    documentId: doc?.id ?? null,
     documentTitle: doc?.title ?? null,
-    revision:      doc?.revision ?? null,
+    revision: doc?.revision ?? null,
   }
 }
 
@@ -87,13 +87,38 @@ export const getProductionOrderById = async (id: string): Promise<ProductionOrde
 }
 
 // -----------------------------------------------------------
-// listSectorOrders — OPs abertas (para futuro painel)
+// listSectorOrders — todas as OPs para o painel de seleção
 // -----------------------------------------------------------
-export const listSectorOrders = async (): Promise<
-  { id: string; op_number: string; product_title: string; status: string }[]
-> => {
-  const db = await getDb()
-  return db.orders
-    .filter(o => o.status === 'in_progress')
-    .map(o => ({ id: o.id, op_number: o.op_number, product_title: o.product_title, status: o.status }))
+export interface OrderSummary {
+  id: string
+  op_number: string
+  product_title: string
+  product_type: string
+  mva_class: string | null
+  kv_class: string | null
+  sector: string
+  status: string
+  hasDocument: boolean
 }
+
+export const listSectorOrders = async (
+  sectorFilter?: string
+): Promise<OrderSummary[]> => {
+  const db = await getDb()
+  let orders = db.orders
+  if (sectorFilter) {
+    orders = orders.filter(o => o.sector === sectorFilter)
+  }
+  return orders.map(o => ({
+    id:            o.id,
+    op_number:     o.op_number,
+    product_title: o.product_title,
+    product_type:  o.product_type,
+    mva_class:     o.mva_class,
+    kv_class:      o.kv_class,
+    sector:        o.sector,
+    status:        o.status,
+    hasDocument:   db.documents.some(d => d.production_order_id === o.id && d.status === 'Released'),
+  }))
+}
+
