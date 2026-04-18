@@ -5,6 +5,8 @@ interface HeaderProps {
   opNumber?: string
   onOpenQrScanner?: () => void
   onOpenOpSelector?: () => void
+  onToggleAdmin?: () => void
+  isAdminView?: boolean
 }
 
 export default function Header({
@@ -12,6 +14,8 @@ export default function Header({
   opNumber = '9982',
   onOpenQrScanner,
   onOpenOpSelector,
+  onToggleAdmin,
+  isAdminView = false,
 }: HeaderProps) {
   const operator = useAuthStore((s) => s.operator)
   const logout = useAuthStore((s) => s.logout)
@@ -104,6 +108,21 @@ export default function Header({
                   <rect x="13" y="13" width="5" height="5" fill="currentColor" opacity="0.6" />
                 </svg>
                 Scanner
+              </button>
+            )}
+            
+            {(operator.role === 'engenheiro' || operator.role === 'supervisor') && onToggleAdmin && (
+              <button
+                className={`industrial-btn btn-secondary ${isAdminView ? 'op-filter-active' : ''}`}
+                onClick={onToggleAdmin}
+                title="Painel de Administração"
+                style={{ marginRight: 16 }}
+              >
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" style={{ marginRight: 6, display: 'inline' }}>
+                  <path d="M8.5 2 L10 5 L13 5.5 L11 8 L11.5 11 L9 10 L6.5 11 L7 8 L5 5.5 L8 5 Z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round" />
+                  <circle cx="9" cy="8" r="1.5" stroke="currentColor" strokeWidth="1" />
+                </svg>
+                {isAdminView ? 'Dashboard' : 'Admin'}
               </button>
             )}
             <div className="rfid-status rfid-online">

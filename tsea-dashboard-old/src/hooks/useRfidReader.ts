@@ -72,6 +72,12 @@ export function useRfidReader() {
   // --------------------------------------------------------
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      // Ignora se o usuário está digitando em um input formal
+      const target = e.target as HTMLElement
+      if (target && ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName)) {
+        return
+      }
+
       const now = Date.now()
 
       if (now - lastKeystrokeRef.current > 500) {

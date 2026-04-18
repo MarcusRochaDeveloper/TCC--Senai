@@ -169,14 +169,38 @@ async function buildDatabase(): Promise<LocalDatabase> {
     }))
   )
 
-  console.log('[TSEA LocalDB] ✅ Banco de dados em memória inicializado — 3 operadores, 3 OPs, 2 documentos Released')
+  // Tenta carregar do localStorage primeiro
+  const savedData = localStorage.getItem('tsea_db')
+  if (savedData) {
+    try {
+      const parsed = JSON.parse(savedData)
+      console.log('[TSEA LocalDB] 🔁 Banco local restaurado do localStorage')
+      return parsed as LocalDatabase
+    } catch {
+      console.error('[TSEA LocalDB] Erro ao carregar do localStorage, revertendo ao seed')
+    }
+  }
 
-  return {
+  // Se não existir salva o seed no localStorage
+  const dbConfig: LocalDatabase = {
     users,
     orders: SEED_ORDERS,
     documents: SEED_DOCUMENTS,
     auditLog: [],
   }
+
+  localStorage.setItem('tsea_db', JSON.stringify(dbConfig))
+  console.log('[TSEA LocalDB] ✅ Banco de dados em memória criado pelo SEED')
+
+  return dbConfig
+}
+
+// -----------------------------------------------------------
+// Persistência síncrona
+// -----------------------------------------------------------
+export async function saveDb(db: LocalDatabase) {
+  _db = db
+  localStorage.setItem('tsea_db', JSON.stringify(db))
 }
 
 // -----------------------------------------------------------
@@ -192,4 +216,25 @@ export async function getDb(): Promise<LocalDatabase> {
   })
 
   return _initPromise
+}
+
+// -----------------------------------------------------------
+// API de Mutação (Admin Panel CRUD)
+// -----------------------------------------------------------
+export async function addUser(user: DbUser): Promise<void> {
+  const db = await getDb()
+  db.users.push(user)
+  await saveDb(db)
+}
+
+export async function addProductionOrder(order: DbProductionOrder): Promise<void> {
+  const db = await getDb()
+  db.orders.push(order)
+  await saveDb(db)
+}
+
+export async function addDocument(doc: DbDocument): Promise<void> {
+  const db = await getDb()
+  db.documents.push(doc)
+  await saveDb(db)
 }

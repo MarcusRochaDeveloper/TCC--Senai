@@ -12,6 +12,7 @@ import QrScanner from './components/QrScanner'
 import OpSelector from './components/OpSelector'
 import PdfViewer from './components/PdfViewer'
 import ThreeDViewer from './components/ThreeDViewer'
+import AdminPanel from './components/AdminPanel'
 import './App.css'
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
   const isAuthEnabled = !!operator
   const [showQr, setShowQr] = useState(false)
   const [showOpSelector, setShowOpSelector] = useState(false)
+  const [currentView, setCurrentView] = useState<'dashboard' | 'admin'>('dashboard')
   const [currentOpNumber, setCurrentOpNumber] = useState<string>('OP-2025-9982')
 
   const { data: activeOrder, isLoading, error } = useQuery({
@@ -53,9 +55,17 @@ function App() {
             opTitle={opTitleText}
             onOpenQrScanner={() => setShowQr(true)}
             onOpenOpSelector={() => setShowOpSelector(true)}
+            onToggleAdmin={() => setCurrentView(prev => prev === 'admin' ? 'dashboard' : 'admin')}
+            isAdminView={currentView === 'admin'}
           />
 
-          {/* Barra de metadata da OP ativa */}
+          {currentView === 'admin' ? (
+            <div style={{ flex: 1, overflow: 'hidden' }}>
+              <AdminPanel />
+            </div>
+          ) : (
+            <>
+              {/* Barra de metadata da OP ativa */}
           {activeOrder && (
             <div className="op-meta-bar">
               <div className="op-meta-left">
@@ -123,6 +133,8 @@ function App() {
               <ThreeDViewer modelUrl={activeOrder?.glbUrl || null} />
             </div>
           </main>
+          </>
+          )}
 
           <footer id="status-bar" className="status-bar">
             <div className="status-left">
