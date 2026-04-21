@@ -1,7 +1,7 @@
 // ============================================================
 // src/lib/authService.ts
-// Serviço de autenticação local — substitui supabase.auth.*
-// Valida crachá RFID contra banco em memória via PBKDF2-SHA256
+// Serviço de autenticação — RFID via PBKDF2-SHA256
+// Valida crachá contra banco local persistido em localStorage
 // ============================================================
 import { getDb, derivePasswordFromUid } from './localDb'
 

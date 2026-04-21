@@ -1,7 +1,6 @@
 // ============================================================
 // src/components/ErrorBoundary.tsx
 // Captura erros React críticos e exibe tela de fallback
-// Sem Supabase — log vai apenas para console local
 // ============================================================
 import { Component, type ReactNode, type ErrorInfo } from 'react'
 

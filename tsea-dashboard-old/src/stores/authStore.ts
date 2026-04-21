@@ -1,7 +1,6 @@
 // ============================================================
 // src/stores/authStore.ts
-// Store Zustand de autenticação — baseado em SQLite local
-// Sem Supabase — sessão em memória (kiosk reiniciável)
+// Store Zustand de autenticação — sessão em memória (modo kiosk)
 // ============================================================
 import { create } from 'zustand'
 import { signOut, insertAuditLog } from '../lib/authService'
@@ -149,8 +148,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
 }))
 
-// initAuthListener é mantido como no-op para compatibilidade com main.tsx
+// Inicialização do listener de auth (no-op em modo local)
 export function initAuthListener() {
-  // SQLite local: sem sessão remota — nada a escutar
   return () => {}
 }

@@ -1,7 +1,7 @@
 // ============================================================
 // src/hooks/useRfidReader.ts
 // Intercepta eventos de teclado do Keyboard Wedge (leitor RFID)
-// Autentica localmente via SQLite + PBKDF2 — sem Supabase
+// Autentica via PBKDF2-SHA256 contra banco local
 // ============================================================
 import { useEffect, useRef, useCallback } from 'react'
 import { signInWithBadge } from '../lib/authService'

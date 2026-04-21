@@ -1,7 +1,7 @@
 // ============================================================
 // src/lib/localDb.ts
-// Banco de dados local em memória — substitui Supabase para testes
-// Sem dependências de WASM — puro JS/TS, sem problemas de CORS/COEP
+// Banco de dados persistente via localStorage
+// Autenticação RFID, Ordens de Produção, Documentos Técnicos
 // ============================================================
 
 // -----------------------------------------------------------
@@ -78,9 +78,9 @@ export interface DbAuditEntry {
 }
 
 // -----------------------------------------------------------
-// Dados de seed — operadores, OPs e documentos de teste
+// Dados iniciais — operadores, OPs e documentos
 // -----------------------------------------------------------
-const SEED_ORDERS: DbProductionOrder[] = [
+const INITIAL_ORDERS: DbProductionOrder[] = [
   {
     id: 'op-9982',
     op_number: 'OP-2025-9982',
@@ -113,7 +113,7 @@ const SEED_ORDERS: DbProductionOrder[] = [
   },
 ]
 
-const SEED_DOCUMENTS: DbDocument[] = [
+const INITIAL_DOCUMENTS: DbDocument[] = [
   {
     id: 'doc-001',
     production_order_id: 'op-9982',
@@ -148,15 +148,15 @@ let _db: LocalDatabase | null = null
 let _initPromise: Promise<LocalDatabase> | null = null
 
 async function buildDatabase(): Promise<LocalDatabase> {
-  // Derivar hashes PBKDF2 para os 3 operadores de teste
-  const seedUsersRaw = [
+  // Derivar hashes PBKDF2 para os operadores pré-cadastrados
+  const initialUsers = [
     { id: 'usr-carlos', badge: 'A3F2B1C0', name: 'Carlos Alvarenga', reg: 'TS-001', role: 'operador', sector: 'Montagem de Transformadores', sector_code: 'MT-01' },
     { id: 'usr-mariana', badge: 'FF01A2B3', name: 'Mariana Couto', reg: 'TS-002', role: 'inspetor', sector: 'Bobinagem', sector_code: 'BO-02' },
     { id: 'usr-jose', badge: 'CC9944DD', name: 'José Ferreira', reg: 'TS-003', role: 'engenheiro', sector: 'Testes Elétricos', sector_code: 'TE-03' },
   ]
 
   const users: DbUser[] = await Promise.all(
-    seedUsersRaw.map(async u => ({
+    initialUsers.map(async u => ({
       id: u.id,
       badge_uid: u.badge,
       name: u.name,
@@ -174,23 +174,23 @@ async function buildDatabase(): Promise<LocalDatabase> {
   if (savedData) {
     try {
       const parsed = JSON.parse(savedData)
-      console.log('[TSEA LocalDB] 🔁 Banco local restaurado do localStorage')
+      console.log('[TSEA LocalDB] Banco restaurado do localStorage')
       return parsed as LocalDatabase
     } catch {
-      console.error('[TSEA LocalDB] Erro ao carregar do localStorage, revertendo ao seed')
+      console.error('[TSEA LocalDB] Erro ao carregar do localStorage, recriando banco')
     }
   }
 
-  // Se não existir salva o seed no localStorage
+  // Primeira execução — persiste dados iniciais no localStorage
   const dbConfig: LocalDatabase = {
     users,
-    orders: SEED_ORDERS,
-    documents: SEED_DOCUMENTS,
+    orders: INITIAL_ORDERS,
+    documents: INITIAL_DOCUMENTS,
     auditLog: [],
   }
 
   localStorage.setItem('tsea_db', JSON.stringify(dbConfig))
-  console.log('[TSEA LocalDB] ✅ Banco de dados em memória criado pelo SEED')
+  console.log('[TSEA LocalDB] Banco de dados inicializado')
 
   return dbConfig
 }

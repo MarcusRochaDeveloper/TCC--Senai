@@ -15,7 +15,7 @@ const queryClient = new QueryClient({
   },
 })
 
-// No-op para compatibilidade — SQLite local não tem listener remoto
+// Inicialização do listener de autenticação
 initAuthListener()
 
 createRoot(document.getElementById('root')!).render(
